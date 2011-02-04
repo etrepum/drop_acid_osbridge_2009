@@ -1,0 +1,1014 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.5: http://docutils.sourceforge.net/" />
+<meta name="version" content="S5 1.1" />
+<title>Drop ACID and think about data</title>
+<meta name="author" content="Bob Ippolito" />
+<meta name="date" content="June 2009" />
+<style type="text/css">
+
+/*
+:Author: David Goodger (goodger@python.org)
+:Id: $Id: html4css1.css 5196 2007-06-03 20:25:28Z wiemann $
+:Copyright: This stylesheet has been placed in the public domain.
+
+Default cascading style sheet for the HTML output of Docutils.
+
+See http://docutils.sf.net/docs/howto/html-stylesheets.html for how to
+customize this style sheet.
+*/
+
+/* used to remove borders from tables and images */
+.borderless, table.borderless td, table.borderless th {
+  border: 0 }
+
+table.borderless td, table.borderless th {
+  /* Override padding for "table.docutils td" with "! important".
+     The right padding separates the table cells. */
+  padding: 0 0.5em 0 0 ! important }
+
+.first {
+  /* Override more specific margin styles with "! important". */
+  margin-top: 0 ! important }
+
+.last, .with-subtitle {
+  margin-bottom: 0 ! important }
+
+.hidden {
+  display: none }
+
+a.toc-backref {
+  text-decoration: none ;
+  color: black }
+
+blockquote.epigraph {
+  margin: 2em 5em ; }
+
+dl.docutils dd {
+  margin-bottom: 0.5em }
+
+/* Uncomment (and remove this text!) to get bold-faced definition list terms
+dl.docutils dt {
+  font-weight: bold }
+*/
+
+div.abstract {
+  margin: 2em 5em }
+
+div.abstract p.topic-title {
+  font-weight: bold ;
+  text-align: center }
+
+div.admonition, div.attention, div.caution, div.danger, div.error,
+div.hint, div.important, div.note, div.tip, div.warning {
+  margin: 2em ;
+  border: medium outset ;
+  padding: 1em }
+
+div.admonition p.admonition-title, div.hint p.admonition-title,
+div.important p.admonition-title, div.note p.admonition-title,
+div.tip p.admonition-title {
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title {
+  color: red ;
+  font-weight: bold ;
+  font-family: sans-serif }
+
+/* Uncomment (and remove this text!) to get reduced vertical space in
+   compound paragraphs.
+div.compound .compound-first, div.compound .compound-middle {
+  margin-bottom: 0.5em }
+
+div.compound .compound-last, div.compound .compound-middle {
+  margin-top: 0.5em }
+*/
+
+div.dedication {
+  margin: 2em 5em ;
+  text-align: center ;
+  font-style: italic }
+
+div.dedication p.topic-title {
+  font-weight: bold ;
+  font-style: normal }
+
+div.figure {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+div.footer, div.header {
+  clear: both;
+  font-size: smaller }
+
+div.line-block {
+  display: block ;
+  margin-top: 1em ;
+  margin-bottom: 1em }
+
+div.line-block div.line-block {
+  margin-top: 0 ;
+  margin-bottom: 0 ;
+  margin-left: 1.5em }
+
+div.sidebar {
+  margin: 0 0 0.5em 1em ;
+  border: medium outset ;
+  padding: 1em ;
+  background-color: #ffffee ;
+  width: 40% ;
+  float: right ;
+  clear: right }
+
+div.sidebar p.rubric {
+  font-family: sans-serif ;
+  font-size: medium }
+
+div.system-messages {
+  margin: 5em }
+
+div.system-messages h1 {
+  color: red }
+
+div.system-message {
+  border: medium outset ;
+  padding: 1em }
+
+div.system-message p.system-message-title {
+  color: red ;
+  font-weight: bold }
+
+div.topic {
+  margin: 2em }
+
+h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
+h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
+  margin-top: 0.4em }
+
+h1.title {
+  text-align: center }
+
+h2.subtitle {
+  text-align: center }
+
+hr.docutils {
+  width: 75% }
+
+img.align-left {
+  clear: left }
+
+img.align-right {
+  clear: right }
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+p.attribution {
+  text-align: right ;
+  margin-left: 50% }
+
+p.caption {
+  font-style: italic }
+
+p.credits {
+  font-style: italic ;
+  font-size: smaller }
+
+p.label {
+  white-space: nowrap }
+
+p.rubric {
+  font-weight: bold ;
+  font-size: larger ;
+  color: maroon ;
+  text-align: center }
+
+p.sidebar-title {
+  font-family: sans-serif ;
+  font-weight: bold ;
+  font-size: larger }
+
+p.sidebar-subtitle {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+p.topic-title {
+  font-weight: bold }
+
+pre.address {
+  margin-bottom: 0 ;
+  margin-top: 0 ;
+  font-family: serif ;
+  font-size: 100% }
+
+pre.literal-block, pre.doctest-block {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+span.classifier {
+  font-family: sans-serif ;
+  font-style: oblique }
+
+span.classifier-delimiter {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+span.interpreted {
+  font-family: sans-serif }
+
+span.option {
+  white-space: nowrap }
+
+span.pre {
+  white-space: pre }
+
+span.problematic {
+  color: red }
+
+span.section-subtitle {
+  /* font-size relative to parent (h1..h6 element) */
+  font-size: 80% }
+
+table.citation {
+  border-left: solid 1px gray;
+  margin-left: 1px }
+
+table.docinfo {
+  margin: 2em 4em }
+
+table.docutils {
+  margin-top: 0.5em ;
+  margin-bottom: 0.5em }
+
+table.footnote {
+  border-left: solid 1px black;
+  margin-left: 1px }
+
+table.docutils td, table.docutils th,
+table.docinfo td, table.docinfo th {
+  padding-left: 0.5em ;
+  padding-right: 0.5em ;
+  vertical-align: top }
+
+table.docutils th.field-name, table.docinfo th.docinfo-name {
+  font-weight: bold ;
+  text-align: left ;
+  white-space: nowrap ;
+  padding-left: 0 }
+
+h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
+h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
+  font-size: 100% }
+
+ul.auto-toc {
+  list-style-type: none }
+
+</style>
+<!-- configuration parameters -->
+<meta name="defaultView" content="slideshow" />
+<meta name="controlVis" content="hidden" />
+<!-- style sheet links -->
+<script src="ui/mochikit/slides.js" type="text/javascript"></script>
+<link rel="stylesheet" href="ui/mochikit/slides.css"
+      type="text/css" media="projection" id="slideProj" />
+<link rel="stylesheet" href="ui/mochikit/outline.css"
+      type="text/css" media="screen" id="outlineStyle" />
+<link rel="stylesheet" href="ui/mochikit/print.css"
+      type="text/css" media="print" id="slidePrint" />
+<link rel="stylesheet" href="ui/mochikit/opera.css"
+      type="text/css" media="projection" id="operaFix" />
+
+<style type="text/css">
+#currentSlide {display: none;}
+</style>
+</head>
+<body>
+<div class="layout">
+<div id="controls"></div>
+<div id="currentSlide"></div>
+<div id="header">
+
+</div>
+<div id="footer">
+<h1>Drop ACID and think about data</h1>
+
+</div>
+</div>
+<div class="presentation">
+<div class="slide" id="slide0">
+<h1 class="title">Drop ACID and think about data</h1>
+<table class="docinfo" frame="void" rules="none">
+<col class="docinfo-name" />
+<col class="docinfo-content" />
+<tbody valign="top">
+<tr><th class="docinfo-name">Author:</th>
+<td>Bob Ippolito</td></tr>
+<tr><th class="docinfo-name">Date:</th>
+<td>June 2009</td></tr>
+<tr class="field"><th class="docinfo-name">Venue:</th><td class="field-body">Open Source Bridge 2009</td>
+</tr>
+</tbody>
+</table>
+<!-- Definitions of interpreted text roles (classes) for S5/HTML data. -->
+<!-- This data file has been placed in the public domain. -->
+<!-- Colours
+======= -->
+<!-- Text Sizes
+========== -->
+<!-- Display in Slides (Presentation Mode) Only
+========================================== -->
+<!-- Display in Outline Mode Only
+============================ -->
+<!-- Display in Print Only
+===================== -->
+<!-- Display in Handout Mode Only
+============================ -->
+<!-- Incremental Display
+=================== -->
+<!-- colors -->
+<!-- =========================== -->
+<!-- general useful commands -->
+<!-- =========================== -->
+<!-- closed bracket -->
+<!-- =========================== -->
+<!-- example block -->
+<!-- =========================== -->
+<!-- alert block -->
+<!-- =========================== -->
+<!-- columns -->
+<!-- =========================== -->
+<script type="text/javascript">
+    addLoadEvent(function () {
+        appendChildNodes(document.body,
+            DIV({id: "mochikit_logo", 'class': 'draggable'}));
+    });
+</script>
+
+</div>
+<div class="slide" id="bob-s-perspective">
+<h1>Bob's Perspective</h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name" colspan="2">Startup with lots of data:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>Cofounded Mochi Media in 2005</li>
+<li>MochiBot analytics platform (for Flash)</li>
+<li>MochiAds ad serving platform (for Flash games)</li>
+<li>Other cool services for game developers</li>
+</ul>
+</div>
+<div class="slide" id="mochi-ad-sales">
+<h1>Mochi Ad Sales</h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Hard Sell:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<img alt="images/mochi_ad_sales.jpg" src="images/mochi_ad_sales.jpg" />
+</div>
+<div class="slide" id="what-s-acid">
+<h1>What's ACID?</h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name" colspan="2">A promise ring your DBMS wears:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body"></td>
+</tr>
+<tr class="field"><th class="field-name">Atomicity:</th><td class="field-body">all or nothing</td>
+</tr>
+<tr class="field"><th class="field-name">Consistency:</th><td class="field-body">no explosions</td>
+</tr>
+<tr class="field"><th class="field-name">Isolation:</th><td class="field-body">no fights</td>
+</tr>
+<tr class="field"><th class="field-name">Durability:</th><td class="field-body">no lying</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="slide" id="acid-trips">
+<h1>ACID Trips</h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name" colspan="2">Scalability and reliability:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>Downtime is unacceptable</li>
+<li>Reliable is &gt;= 2 nodes</li>
+<li>Scalable is ... more</li>
+<li>Networks make it hard</li>
+<li>Networks make it hard</li>
+<li>Networks make it hard</li>
+</ul>
+</div>
+<div class="slide" id="what-can-i-have">
+<h1>What can I have?</h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name" colspan="2">CAP theorem says pick two:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>Consistency</li>
+<li>Availability</li>
+<li>Partition tolerance</li>
+</ul>
+</div>
+<div class="slide" id="turn-up-the-base">
+<h1>Turn up the BASE</h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name" colspan="2">Write smarter applications:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>Basically Available</li>
+<li>Soft state</li>
+<li>Eventually consistent</li>
+</ul>
+</div>
+<div class="slide" id="base-jumping">
+<h1>BASE jumping</h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name" colspan="2">Everyone else is doing it:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>Google</li>
+<li>Amazon</li>
+<li>eBay</li>
+<li>Yahoo!</li>
+<li>Facebook</li>
+<li>...</li>
+</ul>
+</div>
+<div class="slide" id="bigtable">
+<h1>BigTable</h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Google:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>Paxos (Chubby)</li>
+<li>Single-master</li>
+<li>Distributed tablets via GFS</li>
+<li>Row/Column db hybrid</li>
+<li>Compression (BMDiff, Zippy)</li>
+<li>Versioned (Row, Column, Timestamp)</li>
+<li>Bloom filters</li>
+</ul>
+</div>
+<div class="slide" id="bigtable-pros">
+<h1>BigTable Pros</h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Pros:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>Compression = Awesome</li>
+<li>Clients are probably simple</li>
+<li>Integrates with map/reduce</li>
+</ul>
+</div>
+<div class="slide" id="bigtable-cons">
+<h1>BigTable Cons</h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Cons:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>Proprietary to Google</li>
+<li>Single-master</li>
+</ul>
+</div>
+<div class="slide" id="bigtable-diagram">
+<h1>BigTable Diagram</h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Single-master:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<img alt="images/i-has-minions.jpg" src="images/i-has-minions.jpg" />
+</div>
+<div class="slide" id="dynamo">
+<h1>Dynamo</h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Amazon:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>Key/Value store</li>
+<li>Consistent hashing</li>
+<li>Vector clocks</li>
+<li>Read repair</li>
+</ul>
+</div>
+<div class="slide" id="dynamo-pros">
+<h1>Dynamo Pros</h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Pros:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>No master</li>
+<li>Highly available for write</li>
+<li>Knobs to make it fast to read</li>
+<li>&quot;Simple&quot; (lots of half-baked clones!)</li>
+</ul>
+</div>
+<div class="slide" id="dynamo-cons">
+<h1>Dynamo Cons</h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Cons:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>Proprietary to Amazon</li>
+<li>Clients need to be smart</li>
+<li>No compression</li>
+<li>Not suitable for column-like workloads</li>
+<li>Just a Key/Value store</li>
+</ul>
+</div>
+<div class="slide" id="dynamo-diagram">
+<h1>Dynamo Diagram</h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Smart client:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<img alt="images/we-await-ur-instrucsions.jpg" src="images/we-await-ur-instrucsions.jpg" />
+</div>
+<div class="slide" id="cassandra">
+<h1>Cassandra</h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name" colspan="2">Facebook -&gt; Apache:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>Open source!</li>
+<li>No master like Dynamo</li>
+<li>Storage model more like BigTable</li>
+</ul>
+</div>
+<div class="slide" id="cassandra-pros">
+<h1>Cassandra Pros</h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Pros:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>OPEN SOURCE</li>
+<li>Incrementally scalable</li>
+<li>Minimal administration</li>
+</ul>
+</div>
+<div class="slide" id="cassandra-cons">
+<h1>Cassandra Cons</h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Cons:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>Not polished</li>
+<li>No compression yet</li>
+</ul>
+</div>
+<div class="slide" id="cassandra-diagram">
+<h1>Cassandra Diagram</h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Soul Calibur:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<img alt="images/sc4_pub_ss_cassandra003_copy.jpg" src="images/sc4_pub_ss_cassandra003_copy.jpg" />
+</div>
+<div class="slide" id="distributed-musings">
+<h1>Distributed Musings</h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">New Hotness:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>Distributed databases are the new web framework</li>
+<li>... except none of them are awesome yet</li>
+<li>I don't think we need another half-baked Dynamo clone</li>
+</ul>
+</div>
+<div class="slide" id="key-value-stores">
+<h1>Key-Value Stores</h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name" colspan="2">Simple and Fast:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>Similar to a Python dict</li>
+<li>Keys usually bytes, probably limited</li>
+<li>Values usually bytes, often have fewer limits</li>
+<li>Extremely fast, simple</li>
+</ul>
+</div>
+<div class="slide" id="memcached">
+<h1>Memcached</h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name" colspan="2">Key/Value store as cache:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>No persistence</li>
+<li>RAM only</li>
+<li>Throws data away (on purpose)</li>
+<li>Lightning fast</li>
+<li>&quot;Everyone&quot; uses it</li>
+</ul>
+</div>
+<div class="slide" id="caching-immutable-data">
+<h1>Caching Immutable Data</h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name" colspan="2">If only data never changed:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>Immutable is easy, do that</li>
+</ul>
+</div>
+<div class="slide" id="caching-mutable-data">
+<h1>Caching Mutable Data</h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name" colspan="2">Invalidation sucks:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>Mutable is hard</li>
+<li>Failed transactions?</li>
+<li>Concurrent writers?</li>
+<li>Dependent cache keys?</li>
+<li>You will get it wrong and it will be hard to debug</li>
+</ul>
+</div>
+<div class="slide" id="tokyo-cabinet-tyrant">
+<h1>Tokyo Cabinet/Tyrant</h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name" colspan="2">Not your mom's BerkeleyDB:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>Disk persistent</li>
+<li>Very performant</li>
+<li>Actively developed</li>
+<li>Similar replication strategy to MySQL</li>
+</ul>
+</div>
+<div class="slide" id="redis">
+<h1>Redis</h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Still very new:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>Not just a Key/Value store</li>
+<li>Matching on key spaces</li>
+<li>Values can be bytes, lists or sets</li>
+<li>Requires full store in RAM</li>
+<li>Might be a nice cache server?</li>
+</ul>
+</div>
+<div class="slide" id="document-databases">
+<h1>Document Databases</h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Schema-free:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>Very easy to use</li>
+<li>Document Versioning</li>
+<li>Great for storing documents</li>
+</ul>
+</div>
+<div class="slide" id="couchdb">
+<h1>CouchDB</h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name" colspan="2">Document DB Poster Child:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>Apache project</li>
+<li>Asynchronous replication</li>
+<li>JSON based</li>
+<li>Views materialized on demand (not indexes)</li>
+<li>Neat admin UI</li>
+</ul>
+</div>
+<div class="slide" id="mongodb">
+<h1>MongoDB</h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">C++'s revenge:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>Fast</li>
+<li>JSON and BSON (binary JSON-ish)</li>
+<li>Asynchronous replication with auto-sharding &quot;soon&quot;</li>
+<li>Index support</li>
+<li>Nested documents</li>
+<li>Advanced queries</li>
+</ul>
+</div>
+<div class="slide" id="column-databases">
+<h1>Column Databases</h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name" colspan="2">Data Warehousing:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>Sequential reads are awesome</li>
+<li>Columns compress better than rows</li>
+<li>Doesn't waste I/O on uninteresting columns</li>
+</ul>
+</div>
+<div class="slide" id="monetdb">
+<h1>MonetDB</h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name" colspan="2">Research project:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>Tried really hard to get it to work</li>
+<li>Crashes a lot and corrupts your data</li>
+<li>Do not waste your time</li>
+</ul>
+</div>
+<div class="slide" id="luciddb">
+<h1>LucidDB</h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name" colspan="2">Sounds interesting:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>Java/C++ open source data warehouse</li>
+<li>No clustering</li>
+<li>No experience yet</li>
+</ul>
+</div>
+<div class="slide" id="vertica">
+<h1>Vertica</h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">We paid for it:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>Commercial (based on C-Store)</li>
+<li>Clustered</li>
+<li>Would still prefer open source</li>
+</ul>
+</div>
+<div class="slide" id="bitmap-indexes">
+<h1>Bitmap Indexes</h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name" colspan="2">Sequential Scans can be fast:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>1-N bits per row of data</li>
+<li>Can apply logical operations across indexes</li>
+<li>Can be compressed (BBC, WAH)</li>
+<li>FastBit is a good implementation</li>
+</ul>
+</div>
+<div class="slide" id="bitmap-index-uses">
+<h1>Bitmap Index Uses</h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Big Queries:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>PostgreSQL 8.1+ in-memory for some queries</li>
+<li>Almost a requirement for column stores</li>
+<li>FastBit is a great implementation (WAH)</li>
+</ul>
+</div>
+<div class="slide" id="bloom-filters-are-neat">
+<h1>Bloom Filters are Neat</h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name" colspan="2">But our Princess is in another castle:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>Probabilistic data structure</li>
+<li>False positives at a known error</li>
+<li>Constant space</li>
+<li>I won't bore you with the math</li>
+</ul>
+</div>
+<div class="slide" id="bloom-filter-diagram">
+<h1>Bloom Filter Diagram</h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name" colspan="2">Actually Relevant:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<img alt="images/649px-Bloom_filter.png" src="images/649px-Bloom_filter.png" />
+</div>
+<div class="slide" id="bloom-filter-uses">
+<h1>Bloom Filter Uses</h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name" colspan="2">Find stuff, maybe:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>Approximate counting of a large set (e.g. unique IPs from logs)</li>
+<li>Knowing that data is definitely NOT stored somewhere, e.g. remote cache</li>
+<li>Several variants (Counting Bloom Filter, Scalable Bloom Filter, ...)</li>
+</ul>
+</div>
+<div class="slide" id="questions">
+<h1>Questions?</h1>
+<ul class="simple">
+<li>Yes, there are still other kinds of databases.</li>
+</ul>
+</div>
+</div>
+</body>
+</html>
