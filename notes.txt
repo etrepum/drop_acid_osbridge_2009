@@ -17,7 +17,7 @@ Bloom filters:
 * http://en.wikipedia.org/wiki/Bloom_filter
 * http://www.youtube.com/watch?v=947gWqwkhu0
 * http://github.com/jaybaird/python-sbf/tree/master
-* http://www.eecs.harvard.edu/~kirsch/pubs/bbbf/esa06.pdf
+* https://www.eecs.harvard.edu/~michaelm/postscripts/tr-02-05.pdf
 * Bloom Filter, Scalable Bloom Filter, Counting Bloom Filter
 
 Cassandra:
